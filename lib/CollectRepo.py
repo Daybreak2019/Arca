@@ -1,6 +1,5 @@
 
 from lib.System import System
-from lib.Process_Data import Process_Data
 from datetime import datetime, timedelta
 from time import sleep
 import requests
@@ -27,9 +26,9 @@ class CollectRepo():
               'owner_type', 'url',
               'pushed_at', 'topics', 'description']
 
-    def __init__(self):
+    def __init__(self, RepoPath):
         self.list_of_repositories = []
-        self.file_name = System.OriginalRepo
+        self.file_name = RepoPath
         self.updated_time = {}
         self.cur_year = 0
         self.date_created = ""

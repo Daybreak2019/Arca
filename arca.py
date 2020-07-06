@@ -4,15 +4,18 @@ import sys, getopt
 from progressbar import ProgressBar
 from lib.System import System
 from lib.CollectRepo import CollectRepo
+from lib.TaskDistributer import TaskDistributer
 
 def CollectRepository(year=0):
     print(">>>>>>>>>>>> CollectRepo fom github...")
     # Retrieves repo data from Github by page
-    CR = CollectRepo()
+    CR = CollectRepo(System.OriginalRepo)
     CR.collect_repositories()
 
 def CollectCommits():
     print(">>>>>>>>>>>> CollectCommits...")
+    TD = TaskDistributer (System.OriginalRepo)
+    TD.Distributer ()
     
 
 def AnalyzeCommits():

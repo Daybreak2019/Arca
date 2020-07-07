@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 from lib.System import System
+from lib.RetrvCommits import RetrvCommits
 from progressbar import ProgressBar
 import threading
 
@@ -10,10 +11,12 @@ class Task(threading.Thread):
         self.Account  = Account
         self.RepoList = RepoList
         self.TaskNo   = TaskNo
-        print ("Create Task %d" %TaskNo)
         
     def run(self):
-        print ("[%d]Account: %s - %s" %(self.TaskNo, self.Account["Name"], self.Account["Token"]))
+        print ("[Task%d]Start.." %self.TaskNo)
+        CC = RetrvCommits(self.TaskNo, self.Account["Name"], self.Account["Token"], self.RepoList)
+        CC.collect_data ()
+        print ("[Task%d]Finish collecting commits of %d repositories.." %(self.TaskNo, len(self.RepoList)))
         
         
 

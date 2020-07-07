@@ -15,7 +15,7 @@ def CollectRepository(year=0):
 def CollectCommits():
     print(">>>>>>>>>>>> CollectCommits...")
     TD = TaskDistributer (System.OriginalRepo)
-    TD.Distributer ()
+    TD.distributer ()
     
 
 def AnalyzeCommits():

@@ -21,15 +21,22 @@ class RetrvCommitContent(CommitCollector):
      
     def parse_commits(self, commit_url):
         result = self.http_get_call(commit_url)
+        if (result == None):
+            return
+        
         allitems = result['tree']
         for item in allitems:
             if item['type'] == 'tree':
                 #self.parse_commits(item['url'])
                 pass
             else:
-                if (self.is_filtered (item['path'])):
+                if (self.is_filtered (item['path']) or
+                    (item.__contains__('url') == False)):
                     continue
+                    
                 result2 = self.http_get_call(item['url'])
+                if (result2 == None):
+                    continue
                 content = result2['content']
                 content = base64.b64decode(content)
                 

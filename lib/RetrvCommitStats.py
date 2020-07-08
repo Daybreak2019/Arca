@@ -64,7 +64,6 @@ class RetrvCommitStats(CommitCollector):
             self.write_csv (StatFile)
             print ("\t[Task%d-%d/%d]Stats -> %d" %(self.Task, index, cdf.shape[0], len(self.Output)))
             self.Output = []
-            if (index > 2):
-                break;
+
 
 

@@ -19,9 +19,12 @@ class CommitCollector(metaclass=abc.ABCMeta):
         result = requests.get(url,
                               auth=(self.UserName, self.Token),
                               headers={"Accept": "application/vnd.github.mercy-preview+json"})
+        if (result.status_code == 404):
+            return None
+        
         if (result.status_code != 200 and result.status_code != 422):
             print("[Task%d]%s: %s, URL: %s" % (self.Task, result.status_code, result.reason, url))
-            sleep(300)
+            sleep(1800)
             return self.http_get_call(url)     
         return result.json()
     
@@ -39,6 +42,21 @@ class CommitCollector(metaclass=abc.ABCMeta):
                     writer.writerow(row)
         csv_file.close()
         
+    def get_commit_path (self, RepoId):
+        CommitDir  = System.setdir_cmmt (str(RepoId))    
+        CommitFile = CommitDir + "/" + str(RepoId) + '.csv'
+        return CommitFile
+        
+    def get_content_path (self, RepoId, Index):
+        ContentDir = System.setdir_cmmt_content (str(RepoId))
+        ContentFile = ContentDir + "/" + str(Index) + ".csv"
+        return ContentFile
+        
+    def get_stats_path (self, RepoId, Index):
+        StatsDir = System.setdir_cmmt_stats (str(RepoId))
+        StatsFile = StatsDir + "/" + str(Index) + ".csv"
+        return StatsFile
+        
     def is_processed (self, id):
         return System.access_tag (str(id))
     
@@ -53,7 +71,7 @@ class CommitCollector(metaclass=abc.ABCMeta):
             id = str(repo['id'])
             if (self.is_processed (id)):
                 continue
-            print ("[Task%d-%d/%d]repo -> %s : %s" %(self.Task, No, TotalNum, repo['id'], repo['url']))
+            print ("[Task%d-%d/%d]repo -> %s : %s" %(self.Task, No+1, TotalNum, repo['id'], repo['url']))
             self.process(id, repo['url'])
 
             System.set_tag (id)

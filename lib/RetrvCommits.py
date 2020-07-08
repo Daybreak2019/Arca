@@ -3,6 +3,7 @@
 from lib.System import System
 from lib.CommitCollector import CommitCollector
 from lib.RetrvCommitContent import RetrvCommitContent
+from lib.RetrvCommitStats import RetrvCommitStats
 import os
 import json
 import pandas as pd
@@ -59,18 +60,23 @@ class RetrvCommits(CommitCollector):
             if (commit_num < 100):
                 break
      
-    def save_file (self, id):
-        Dir = System.setdir_cmmt (str(id))    
-        FileName = Dir + "/" + str(id) + '.csv'
-        self.write_csv (FileName)
-        return FileName
+    def save_file (self, RepoId):   
+        CommitFile = self.get_commit_path (RepoId)
+        self.write_csv (CommitFile)
+        return CommitFile
         
     def process(self, RepoId, Url):
         self.collect_commits (Url)
         CmmitFile = self.save_file (RepoId)
         
         # content
+        print ("\t[Task%d]Srart Collect Commit Content -> %s" %(self.Task, Url))
         RCC = RetrvCommitContent (CmmitFile, self.Task, self.UserName, self.Token)
         RCC.process (RepoId)
+        
+        # stats
+        print ("\t[Task%d]Srart Collect Commit Stats -> %s" %(self.Task, Url))
+        RCS = RetrvCommitStats (CmmitFile, self.Task, self.UserName, self.Token)
+        RCS.process (RepoId, Url)
         
 

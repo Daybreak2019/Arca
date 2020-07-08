@@ -11,6 +11,7 @@ class System():
     TagSet       = BaseDir + "/TagSet"
     OriginalRepo = BaseDir + "/RepositoryList.csv"
 
+
     @staticmethod
     def mkdir(path):
         path=path.strip()
@@ -28,6 +29,16 @@ class System():
     @staticmethod
     def setdir_cmmt(dir):
         NewDir = System.CmmtSet + "/" + dir
+        return System.setdir (NewDir)
+        
+    @staticmethod
+    def setdir_cmmt_content(dir):
+        NewDir = System.CmmtSet + "/" + dir + "/Content"
+        return System.setdir (NewDir)
+    
+    @staticmethod
+    def setdir_cmmt_stats(dir):
+        NewDir = System.CmmtSet + "/" + dir + "/Stats"
         return System.setdir (NewDir)
         
     @staticmethod

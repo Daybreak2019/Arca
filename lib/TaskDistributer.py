@@ -6,8 +6,9 @@ import pandas as pd
 
 class TaskDistributer():
     def __init__(self, RepoPath):    
-        self.Accounts = {"Daybreak2019":"3256850b82bfe2ba2ee2f4075b9f742bce944a06",
-                         "Eagle-2020":"0e66ca05def6a3ba71502563877283ce554c289e"}
+        self.Accounts = {"Daybreak2019":"*****************",
+                         "Eagle-2020":"*****************",
+						 "acielecki":"*****************"}
         self.RepoPath = RepoPath        
         self.RepoList = []
         

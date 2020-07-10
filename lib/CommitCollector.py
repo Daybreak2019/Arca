@@ -19,12 +19,12 @@ class CommitCollector(metaclass=abc.ABCMeta):
         result = requests.get(url,
                               auth=(self.UserName, self.Token),
                               headers={"Accept": "application/vnd.github.mercy-preview+json"})
-        if (result.status_code == 404):
+        if (result.status_code == 404 or result.status_code == 500):
             return None
         
         if (result.status_code != 200 and result.status_code != 422):
             print("[Task%d]%s: %s, URL: %s" % (self.Task, result.status_code, result.reason, url))
-            sleep(1800)
+            sleep(1200)
             return self.http_get_call(url)     
         return result.json()
     
@@ -70,6 +70,7 @@ class CommitCollector(metaclass=abc.ABCMeta):
         for repo in self.RepoList:
             id = str(repo['id'])
             if (self.is_processed (id)):
+                No += 1
                 continue
             print ("[Task%d-%d/%d]repo -> %s : %s" %(self.Task, No+1, TotalNum, repo['id'], repo['url']))
             self.process(id, repo['url'])

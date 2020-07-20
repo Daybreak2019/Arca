@@ -10,6 +10,8 @@ class System():
     CmmtSet      = BaseDir + "/CmmtSet"
     TagSet       = BaseDir + "/TagSet"
     OriginalRepo = BaseDir + "/RepositoryList.csv"
+    
+    START_YEAR   = 2016
 
 
     @staticmethod

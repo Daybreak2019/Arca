@@ -20,7 +20,7 @@ UPDATE_MIN    = "min"
 
 class CollectRepo():
 
-    Fields = ['id', 'size', 'forks',
+    Fields = ['id', 'size', 'created_at', 'forks',
               'open_issues', 'subscribers_count',
               'stargazers_count', 'language_dictionary',
               'owner_type', 'url',
@@ -111,18 +111,6 @@ class CollectRepo():
         date = date - timedelta(days=12*30)
         self.updated_time[UPDATE_MIN] = "+pushed:>=" + date.strftime("%Y-%m-%d")
         self.cur_year = year
-
-    def get_basic_auth(self):
-        if (os.getenv("GIT_NAME", "None") != "None" and os.getenv("GIT_PWD", "None") != "None"):
-            print("Github Username:****** \r\n", end="")
-            self.username = os.environ["GIT_NAME"]
-            print("Github Password:****** \r\n", end="")
-            self.password = os.environ["GIT_PWD"] 
-        else:        
-            print("Github Username: ", end="")
-            self.username = str(input())
-            print("Github Password: ", end="")
-            self.password = str(input())
 
     def remove_invalid_repositories(self):
         updated_repos = []
@@ -243,7 +231,6 @@ class CollectRepo():
         self.date_created = "+created:<=" + date.strftime("%Y-%m-%d")
 
     def get_active_repos(self):
-        self.get_basic_auth()
         self.get_date_created()
         self.get_date_updated()
         self.list_of_repositories = self.get_repos(UPDATE_ACTIVE)

@@ -4,6 +4,7 @@ from lib.System import System
 from lib.CommitCollector import CommitCollector
 from lib.RetrvCommitContent import RetrvCommitContent
 from lib.RetrvCommitStats import RetrvCommitStats
+from datetime import datetime, timedelta
 import os
 import json
 import pandas as pd
@@ -13,6 +14,20 @@ class RetrvCommits(CommitCollector):
 
     def __init__(self, Task, UserName, Token, RepoList):
         super(RetrvCommits, self).__init__(Task, UserName, Token, RepoList)
+        
+    def get_date_start(self, create_time):
+        years = (2020 - self.StartYear) + 1
+        print("Date Created Time-Span (years): %d"  %years)
+        days = years * 365.24
+        date = datetime.today() - timedelta(days=days)
+        compute_date = date.strftime("%Y-%m-%d")
+        
+        print ("compute_time = %s, create_time = %s" %(compute_date, create_time))
+        if (compute_date < create_time):
+            compute_date = create_time
+        print ("\t===>compute_time = %s, create_time = %s" %(compute_date, create_time))
+        
+        return ("since=" + compute_date)
 
     #collect commit information displayed on given page
     #and add it to out list of commits for the given project
@@ -42,12 +57,12 @@ class RetrvCommits(CommitCollector):
         return commit_list
     
     #Iterate over all pages of commit info to collect commits
-    def collect_commits(self, url):    
+    def collect_commits(self, create_time, url):    
         #print("Retrieve commits -> %s"  %(url))      
         page_num = 1
         while True:
 
-            commits_url = url + "/commits?" + "per_page=100" + "&page=" + str(page_num)
+            commits_url = url + "/commits?" + self.get_date_start(create_time) + "&per_page=100" + "&page=" + str(page_num)
             
             commits = self.http_get_call(commits_url)
             if (commits == None):
@@ -65,8 +80,8 @@ class RetrvCommits(CommitCollector):
         self.write_csv (CommitFile)
         return CommitFile
         
-    def process(self, RepoId, Url):
-        self.collect_commits (Url)
+    def process(self, RepoId, Time, Url):
+        self.collect_commits (Time, Url)
         CmmitFile = self.save_file (RepoId)
         
         # content

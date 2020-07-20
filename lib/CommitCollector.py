@@ -14,6 +14,8 @@ class CommitCollector(metaclass=abc.ABCMeta):
         self.Token    = Token
         self.RepoList = RepoList
         self.Output   = []
+        
+        self.StartYear = System.START_YEAR
     
     def http_get_call (self, url):
         result = requests.get(url,
@@ -61,7 +63,7 @@ class CommitCollector(metaclass=abc.ABCMeta):
         return System.access_tag (str(id))
     
     @abc.abstractmethod
-    def process(self, id, url=None):
+    def process(self, id, time=None, url=None):
         print("Abstract Method that is implemented by inheriting classes")
         
     def collect_data (self):
@@ -73,7 +75,7 @@ class CommitCollector(metaclass=abc.ABCMeta):
                 No += 1
                 continue
             print ("[Task%d-%d/%d]repo -> %s : %s" %(self.Task, No+1, TotalNum, repo['id'], repo['url']))
-            self.process(id, repo['url'])
+            self.process(id, repo['created_at'], repo['url'])
 
             System.set_tag (id)
             No += 1

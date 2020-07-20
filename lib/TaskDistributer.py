@@ -18,6 +18,7 @@ class TaskDistributer():
             repo = {}
             repo['id']  = row['id']
             repo['url'] = row['url']
+            repo['created_at'] = row['created_at']
             self.RepoList.append (repo)
         print ("Total %d Repositories" %len(self.RepoList))
         

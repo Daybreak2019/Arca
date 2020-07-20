@@ -85,9 +85,9 @@ class RetrvCommits(CommitCollector):
         CmmitFile = self.save_file (RepoId)
         
         # content
-        #print ("\t[Task%d]Srart Collect Commit Content -> %s" %(self.Task, Url))
-        #RCC = RetrvCommitContent (CmmitFile, self.Task, self.UserName, self.Token)
-        #RCC.process (RepoId)
+        print ("\t[Task%d]Srart Collect Commit Content -> %s" %(self.Task, Url))
+        RCC = RetrvCommitContent (CmmitFile, self.Task, self.UserName, self.Token)
+        RCC.process (RepoId)
         
         # stats
         print ("\t[Task%d]Srart Collect Commit Stats -> %s" %(self.Task, Url))

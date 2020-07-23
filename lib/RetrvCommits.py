@@ -17,16 +17,12 @@ class RetrvCommits(CommitCollector):
         
     def get_date_start(self, create_time):
         years = (2020 - self.StartYear) + 1
-        print("Date Created Time-Span (years): %d"  %years)
         days = years * 365.24
         date = datetime.today() - timedelta(days=days)
         compute_date = date.strftime("%Y-%m-%d")
         
-        print ("compute_time = %s, create_time = %s" %(compute_date, create_time))
         if (compute_date < create_time):
             compute_date = create_time
-        print ("\t===>compute_time = %s, create_time = %s" %(compute_date, create_time))
-        
         return ("since=" + compute_date)
 
     #collect commit information displayed on given page

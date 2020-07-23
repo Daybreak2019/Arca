@@ -23,6 +23,8 @@ class RetrvCommitStats(CommitCollector):
         files = result['files']
         for file in files:
             stats = {}
+            if (self.is_filtered (file['filename'])):
+                continue
             stats['filename'] = file['filename']
             stats['status'] = file['status']
             stats['additions'] = file['additions']

@@ -6,6 +6,7 @@ import abc
 import requests
 import csv
 from time import sleep
+import re
 
 class CommitCollector(metaclass=abc.ABCMeta):
     def __init__(self, Task, UserName, Token, RepoList=None):
@@ -16,6 +17,10 @@ class CommitCollector(metaclass=abc.ABCMeta):
         self.Output   = []
         
         self.StartYear = System.START_YEAR
+        self.FilterRule =  re.compile(r'(^\.[a-zA-Z]|\.lock|\.md$|\.png$|\.jpg$|\.txt$)')
+        
+    def is_filtered (self, FileName):
+        return self.FilterRule.match(FileName)
     
     def http_get_call (self, url):
         result = requests.get(url,

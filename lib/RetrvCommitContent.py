@@ -5,20 +5,12 @@ import csv
 import pandas as pd
 import json
 import base64
-import re
 
 class RetrvCommitContent(CommitCollector):
     def __init__(self, cmmtFile, Task, UserName, Token):
         self.cmmtFile = cmmtFile
         super(RetrvCommitContent, self).__init__(Task, UserName, Token)
-        
-        #[".mailmap", ".nvmrc", ".md", ".git", ".lock"]
-        self.FilterRule =  re.compile(r'(^\.[a-zA-Z]|\.lock|\.md$)')
-        
-    def is_filtered (self, FileName):
-        #FilterList = 
-        return self.FilterRule.match(FileName)
-     
+
     def parse_commits(self, commit_url):
         result = self.http_get_call(commit_url)
         if (result == None):

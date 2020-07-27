@@ -11,7 +11,7 @@ class System():
     TagSet       = BaseDir + "/TagSet"
     OriginalRepo = BaseDir + "/RepositoryList.csv"
     
-    START_YEAR   = 2016
+    START_YEAR   = 0
 
 
     @staticmethod

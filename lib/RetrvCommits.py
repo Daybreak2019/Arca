@@ -58,8 +58,11 @@ class RetrvCommits(CommitCollector):
         page_num = 1
         while True:
 
-            commits_url = url + "/commits?" + self.get_date_start(create_time) + "&per_page=100" + "&page=" + str(page_num)
-            
+            if (System.START_YEAR == 0):
+                commits_url = url + "/commits?" + "&per_page=100" + "&page=" + str(page_num)
+            else:
+                commits_url = url + "/commits?" + self.get_date_start(create_time) + "&per_page=100" + "&page=" + str(page_num)
+                        
             commits = self.http_get_call(commits_url)
             if (commits == None):
                 break
@@ -74,6 +77,7 @@ class RetrvCommits(CommitCollector):
     def save_file (self, RepoId):   
         CommitFile = self.get_commit_path (RepoId)
         self.write_csv (CommitFile)
+        self.Output = []
         return CommitFile
         
     def process(self, RepoId, Time, Url):

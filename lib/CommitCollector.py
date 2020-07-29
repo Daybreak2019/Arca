@@ -21,12 +21,20 @@ class CommitCollector(metaclass=abc.ABCMeta):
         
     def is_filtered (self, FileName):
         return self.FilterRule.match(FileName)
+        
+    def is_continue (self, errcode):
+        codes = [404, 500]
+        if (errcode in codes):
+            return False
+        else:
+            return True
     
     def http_get_call (self, url):
         result = requests.get(url,
                               auth=(self.UserName, self.Token),
                               headers={"Accept": "application/vnd.github.mercy-preview+json"})
-        if (result.status_code == 404 or result.status_code == 500):
+        if (self.is_continue (result.status_code) == False):
+            print("$$$[Task%d]%s: %s, URL: %s" % (self.Task, result.status_code, result.reason, url))
             return None
         
         if (result.status_code != 200 and result.status_code != 422):
@@ -64,6 +72,9 @@ class CommitCollector(metaclass=abc.ABCMeta):
         StatsFile = StatsDir + "/" + str(Index) + ".csv"
         return StatsFile
         
+    def is_exist (self, file):
+        return System.is_exist (file)
+        
     def is_processed (self, id):
         return System.access_tag (str(id))
     
@@ -79,9 +90,10 @@ class CommitCollector(metaclass=abc.ABCMeta):
             if (self.is_processed (id)):
                 No += 1
                 continue
+            
             print ("[Task%d-%d/%d]repo -> %s : %s" %(self.Task, No+1, TotalNum, repo['id'], repo['url']))
             self.process(id, repo['created_at'], repo['url'])
-
+            
             System.set_tag (id)
             No += 1
 

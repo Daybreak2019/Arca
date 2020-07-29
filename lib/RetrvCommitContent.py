@@ -43,16 +43,19 @@ class RetrvCommitContent(CommitCollector):
         CommitIndex = 0
         cdf = pd.read_csv(self.cmmtFile)
         urls = cdf['commits']
-        for url in urls:           
+        for url in urls:
+            ContentFile = self.get_content_path (id, CommitIndex)
+            if (self.is_exist(ContentFile)):
+                CommitIndex += 1
+                continue
+            
             self.parse_commits(url)
             if (len(self.Output) == 0):
                 CommitIndex += 1
                 continue
-            
-            ContentFile = self.get_content_path (id, CommitIndex)
+        
             self.write_csv (ContentFile)
-            print ("\t[Task%d-%d/%d]Content -> %d" %(self.Task, CommitIndex, len(urls), len(self.Output)))
-            
+            print ("\t[Task%d-%d/%d]Content -> %d" %(self.Task, CommitIndex, len(urls), len(self.Output)))         
             self.Output = []
             CommitIndex += 1
  

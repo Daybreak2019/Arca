@@ -57,40 +57,44 @@ class RetrvCommits(CommitCollector):
         #print("Retrieve commits -> %s"  %(url))      
         page_num = 1
         while True:
-
             if (System.START_YEAR == 0):
                 commits_url = url + "/commits?" + "&per_page=100" + "&page=" + str(page_num)
             else:
                 commits_url = url + "/commits?" + self.get_date_start(create_time) + "&per_page=100" + "&page=" + str(page_num)
-                        
+            
             commits = self.http_get_call(commits_url)
             if (commits == None):
                 break
             
-            commit_num = len(commits)
+            commit_num = len(commits)           
             self.Output += self.filter_commits (commits)            
             
             page_num += 1
             if (commit_num < 100):
                 break
      
-    def save_file (self, RepoId):   
-        CommitFile = self.get_commit_path (RepoId)
+    def save_file (self, CmmitFile):
+        if (len (self.Output) == 0):
+            return False;
         self.write_csv (CommitFile)
         self.Output = []
-        return CommitFile
+        return True
         
     def process(self, RepoId, Time, Url):
-        self.collect_commits (Time, Url)
-        CmmitFile = self.save_file (RepoId)
+        CmmitFile = self.get_commit_path (RepoId)
+        
+        if (self.is_exist (CmmitFile) == False):
+            self.collect_commits (Time, Url)
+            if (self.save_file (RepoId) == False):
+                return
         
         # content
-        print ("\t[Task%d]Srart Collect Commit Content -> %s" %(self.Task, Url))
-        RCC = RetrvCommitContent (CmmitFile, self.Task, self.UserName, self.Token)
-        RCC.process (RepoId)
+        #print ("\t[Task%d]Srart Collect Commit Content -> %s" %(self.Task, Url))
+        #RCC = RetrvCommitContent (CmmitFile, self.Task, self.UserName, self.Token)
+        #RCC.process (RepoId)
         
         # stats
-        print ("\t[Task%d]Srart Collect Commit Stats -> %s" %(self.Task, Url))
+        print ("\t[Task%d]Srart Collect Commit Stats -> %s" %(self.Task, Url))       
         RCS = RetrvCommitStats (CmmitFile, self.Task, self.UserName, self.Token)
         RCS.process (RepoId, Url)
         

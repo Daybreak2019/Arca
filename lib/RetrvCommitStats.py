@@ -44,6 +44,10 @@ class RetrvCommitStats(CommitCollector):
     def process(self, RepoId, RepoUrl=None):
         cdf = pd.read_csv(self.cmmtFile)       
         for index, row in cdf.iterrows():
+            StatFile = self.get_stats_path (RepoId, index)
+            if (self.is_exist(StatFile)):
+                continue
+            
             #if the commit is a merge with two parents
             if(',' in str(row['parents'])):
                 parent1 = row['parents'].split(',')[0]
@@ -61,8 +65,7 @@ class RetrvCommitStats(CommitCollector):
                     
             if (len(self.Output) == 0):
                 continue
-                
-            StatFile = self.get_stats_path (RepoId, index)
+     
             self.write_csv (StatFile)
             print ("\t[Task%d-%d/%d]Stats -> %d" %(self.Task, index, cdf.shape[0], len(self.Output)))
             self.Output = []

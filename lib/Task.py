@@ -17,6 +17,7 @@ class Task(threading.Thread):
         CC = RetrvCommits(self.TaskNo, self.Account["Name"], self.Account["Token"], self.RepoList)
         CC.collect_data ()
         print ("[Task%d]Finish collecting commits of %d repositories.." %(self.TaskNo, len(self.RepoList)))
+
         
         
 

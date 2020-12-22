@@ -5,21 +5,28 @@ from lib.Task import Task
 import pandas as pd
 
 class TaskDistributer():
-    def __init__(self, RepoPath):    
-        self.Accounts = {"Daybreak2019":"*****************",
-                         "Eagle-2020":"*****************",
-						 "acielecki":"*****************"}
+    def __init__(self, RepoPath, startNo=0, endNo=65535):
+        #"acielecki":"00f92e94cd9e2bd4d23f5307785b49b86eca18f3"
+        self.Accounts = {}
         self.RepoPath = RepoPath        
         self.RepoList = []
+        self.startNo  = startNo
+        self.endNo    = endNo
         
     def read_repository_list(self):
         df = pd.read_csv(self.RepoPath)
         for index, row in df.iterrows():
+            if index < self.startNo:
+                continue
+            
             repo = {}
             repo['id']  = row['id']
             repo['url'] = row['url']
             repo['created_at'] = row['created_at']
             self.RepoList.append (repo)
+            
+            if index >= self.endNo:
+                break
         print ("Total %d Repositories" %len(self.RepoList))
         
     def distributer(self):

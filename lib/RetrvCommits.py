@@ -76,7 +76,7 @@ class RetrvCommits(CommitCollector):
     def save_file (self, CmmitFile):
         if (len (self.Output) == 0):
             return False;
-        self.write_csv (CommitFile)
+        self.write_csv (CmmitFile)
         self.Output = []
         return True
         
@@ -85,17 +85,17 @@ class RetrvCommits(CommitCollector):
         
         if (self.is_exist (CmmitFile) == False):
             self.collect_commits (Time, Url)
-            if (self.save_file (RepoId) == False):
+            if (self.save_file (CmmitFile) == False):
                 return
         
         # content
-        #print ("\t[Task%d]Srart Collect Commit Content -> %s" %(self.Task, Url))
-        #RCC = RetrvCommitContent (CmmitFile, self.Task, self.UserName, self.Token)
-        #RCC.process (RepoId)
+        print ("\t[Task%d]Srart Collect Commit Content -> %s" %(self.Task, Url))
+        RCC = RetrvCommitContent (CmmitFile, self.Task, self.UserName, self.Token)
+        RCC.process (RepoId)
         
         # stats
-        print ("\t[Task%d]Srart Collect Commit Stats -> %s" %(self.Task, Url))       
-        RCS = RetrvCommitStats (CmmitFile, self.Task, self.UserName, self.Token)
-        RCS.process (RepoId, Url)
+        #print ("\t[Task%d]Srart Collect Commit Stats -> %s" %(self.Task, Url))       
+        #RCS = RetrvCommitStats (CmmitFile, self.Task, self.UserName, self.Token)
+        #RCS.process (RepoId, Url)
         
 

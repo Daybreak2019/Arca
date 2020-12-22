@@ -12,6 +12,9 @@ class System():
     OriginalRepo = BaseDir + "/Repository_List.csv"
     
     START_YEAR   = 0
+    STAS_START_YEAR   = 2011
+    
+    STATS_LIMITTED = 20*1024
 
     @staticmethod
     def mkdir(path):
@@ -41,10 +44,17 @@ class System():
     def setdir_cmmt_stats(dir):
         NewDir = System.CmmtSet + "/" + dir + "/Stats"
         return System.setdir (NewDir)
-        
+
     @staticmethod
     def is_exist(file):
-        return os.path.exists(file)
+        isExists = os.path.exists(file)
+        if (not isExists):
+            return False
+        
+        fsize = os.path.getsize(file)/1024
+        if (fsize == 0):
+            return False
+        return True      
         
     @staticmethod
     def set_tag(tag):

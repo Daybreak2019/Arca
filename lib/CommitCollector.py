@@ -6,7 +6,7 @@ import abc
 import requests
 import csv
 from time import sleep
-import re
+import os
 
 class CommitCollector(metaclass=abc.ABCMeta):
     def __init__(self, Task, UserName, Token, RepoList=None):
@@ -17,10 +17,16 @@ class CommitCollector(metaclass=abc.ABCMeta):
         self.Output   = []
         
         self.StartYear = System.START_YEAR
-        self.FilterRule =  re.compile(r'(^\.[a-zA-Z]|\.lock|\.md$|\.png$|\.jpg$|\.txt$)')
+        self.ExtFilter =  [".txt", ".md", ".png", ".lock", ".jpg", ".gif", ".ico", ".rst", ".toml", ".in", ".ini", ".cfg"]
         
     def is_filtered (self, FileName):
-        return self.FilterRule.match(FileName)
+        if FileName[0] == ".":
+            return True
+        ext = os.path.splitext(FileName)[-1]
+        if ext in self.ExtFilter:
+            return True
+        else:
+            return False
         
     def is_continue (self, errcode):
         codes = [404, 500]

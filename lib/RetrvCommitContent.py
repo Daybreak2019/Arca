@@ -48,7 +48,7 @@ class RetrvCommitContent(CommitCollector):
             if (self.is_exist(ContentFile)):
                 CommitIndex += 1
                 continue
-            
+
             self.parse_commits(url)
             if (len(self.Output) == 0):
                 CommitIndex += 1
@@ -58,6 +58,9 @@ class RetrvCommitContent(CommitCollector):
             print ("\t[Task%d-%d/%d]Content -> %d" %(self.Task, CommitIndex, len(urls), len(self.Output)))         
             self.Output = []
             CommitIndex += 1
+            
+            if (CommitIndex >= System.STATS_LIMITTED):
+                break
  
 
     

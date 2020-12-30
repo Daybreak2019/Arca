@@ -4,6 +4,7 @@ import sys, getopt
 from progressbar import ProgressBar
 from lib.System import System
 from lib.CollectRepo import CollectRepo
+from lib.CloneRepo import CloneRepo
 from lib.TaskDistributer import TaskDistributer
 
 def CollectRepository(year=0):
@@ -20,6 +21,11 @@ def CollectCommits(startNo=0, endNo=65535):
 
 def AnalyzeCommits():
     print(">>>>>>>>>>>> AnalyzeCommits...")
+
+
+def CloneRepos ():
+    CR = CloneRepo ("Repository_List.csv")
+    CR.Clone ()
     
 
 def Daemonize(pid_file=None):
@@ -69,6 +75,7 @@ def main(argv):
             print ("arca.py -s repo     ---  collect repositories from github");
             print ("arca.py -s commits  ---  collect commits for all repositories");
             print ("arca.py -s analysis ---  analyze the commit content");
+            print ("arca.py -s clone    ---  clone all repositories");
             sys.exit()
         elif opt in ("-s", "--step"):
             step = arg;
@@ -98,6 +105,9 @@ def main(argv):
         
     elif (step == "analysis"):
         AnalyzeCommits()
+
+    elif (step == "clone"):
+        CloneRepos ()
         
     else:
         print ("arca.py -s <all/repo/commits/analysis>")  

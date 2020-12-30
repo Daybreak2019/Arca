@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+import os
 import sys, getopt
 from progressbar import ProgressBar
 from lib.System import System
@@ -20,19 +20,46 @@ def CollectCommits(startNo=0, endNo=65535):
 
 def AnalyzeCommits():
     print(">>>>>>>>>>>> AnalyzeCommits...")
+    
+
+def Daemonize(pid_file=None):
+    pid = os.fork()
+    if pid:
+        sys.exit(0)
+ 
+    #os.chdir('/')
+    os.umask(0)
+    os.setsid()
+
+    _pid = os.fork()
+    if _pid:
+        sys.exit(0)
+ 
+    sys.stdout.flush()
+    sys.stderr.flush()
+ 
+    with open('/dev/null') as read_null, open('/dev/null', 'w') as write_null:
+        os.dup2(read_null.fileno(), sys.stdin.fileno())
+        os.dup2(write_null.fileno(), sys.stdout.fileno())
+        os.dup2(write_null.fileno(), sys.stderr.fileno())
+ 
+    if pid_file:
+        with open(pid_file, 'w+') as f:
+            f.write(str(os.getpid()))
+        atexit.register(os.remove, pid_file)
 
 
 def main(argv):
     step = ''
-    by_year = False
+    IsDaemon = False
     startNo = 0
-    endNo   = 0
+    endNo   = 65535
    
     #########################################################
     # get step
     #########################################################
     try:
-        opts, args = getopt.getopt(argv,"hs:b:e:",["step="])
+        opts, args = getopt.getopt(argv,"dhs:b:e:",["step="])
     except getopt.GetoptError:
         print ("run.py -s <step_name>")
         sys.exit(2)
@@ -49,7 +76,12 @@ def main(argv):
             startNo = int(arg);
         elif opt in ("-e", "--end-no"):
             endNo = int(arg);
+        elif opt in ("-d", "--daemon"):
+            IsDaemon = True;
 
+    if IsDaemon:
+        Daemonize ()
+    
     #########################################################
     # collect and analysis
     #########################################################

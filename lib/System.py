@@ -1,14 +1,23 @@
 
 import os
 
+BaseDir = os.getcwd() + "/Data"
+
+
 
 class System():
     PAGE_COUNT   = 10
     PER_PAGE     = 100
 
-    BaseDir      = "./Data"
+    
     CmmtSet      = BaseDir + "/CmmtSet"
+    if not os.path.exists (CmmtSet):
+        os.mkdir (CmmtSet)
+    
     TagSet       = BaseDir + "/TagSet"
+    if not os.path.exists (TagSet):
+        os.mkdir (TagSet)
+        
     OriginalRepo = BaseDir + "/Repository_List.csv"
     
     START_YEAR   = 0

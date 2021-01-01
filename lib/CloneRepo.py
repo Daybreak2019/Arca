@@ -224,8 +224,12 @@ class CloneRepo():
         self.WriteCommts (RepoId)
         os.remove (LogFile)
         self.Commits  = []
+
+    def Clean (self, RepoDir):
+        os.chdir(RepoDir)
+        CleanCmd = "find . -name \".git\" | xargs rm -rf"
+        os.system (CleanCmd)
     
-        
     def Clone (self):
         self.Extersion = {}
         self.GetRepoList ()
@@ -235,21 +239,23 @@ class CloneRepo():
         print (BaseDir)
         Id = 0
         for repo in self.RepoList:
-            #print (repo['id'], " ---> ", repo['clone_url'])
             RepoDir = BaseDir + str(repo['id'])
             if not os.path.exists (RepoDir):
                 os.mkdir (RepoDir)
             os.chdir(RepoDir)
+
+            if System.access_tag (str(repo['id'])):
+                self.Clean (RepoDir)
+                continue
 
             CloneCmd = "git clone " + repo['clone_url']
             print ("[", Id, "] --> ", CloneCmd)
             os.system (CloneCmd)
             Id += 1
 
-            if System.access_tag (str(repo['id'])):
-                continue
             self.CloneLog (repo['id'], RepoDir)
             System.set_tag (str(repo['id']))
+            self.Clean (RepoDir)
 
 
     

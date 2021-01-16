@@ -23,8 +23,8 @@ def AnalyzeCommits():
     print(">>>>>>>>>>>> AnalyzeCommits...")
 
 
-def CloneRepos ():
-    CR = CloneRepo ("Repository_List.csv")
+def CloneRepos (startNo=0, endNo=65535):
+    CR = CloneRepo ("Repository_List.csv", startNo, endNo)
     CR.Clone ()
     
 
@@ -107,7 +107,7 @@ def main(argv):
         AnalyzeCommits()
 
     elif (step == "clone"):
-        CloneRepos ()
+        CloneRepos (startNo, endNo)
         
     else:
         print ("arca.py -s <all/repo/commits/analysis>")  

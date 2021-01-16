@@ -45,7 +45,7 @@ class Commit ():
         
 
 class CloneRepo():
-    def __init__(self, RepoPath):
+    def __init__(self, RepoPath, startNo=0, endNo=65535):
         self.RepoPath = RepoPath        
         self.RepoList = []
         self.UserName = "wangtong0908"
@@ -57,6 +57,9 @@ class CloneRepo():
                      '.go', '.sh', '.java', '.asp', '.aspx', '.ashx', '.cs', '.html', 'cls', 'csc', '.cxx', 
                      '.hpp', '.jsp', '.pas', '.phtml', '.s', '.vbs']
         self.BaseDir = os.getcwd ()
+
+        self.startNo = startNo
+        self.endNo   = endNo
 
     def CleanText(self, Text):
         Text = str (Text)
@@ -256,6 +259,10 @@ class CloneRepo():
         print (BaseDir)
         Id = 0
         for repo in self.RepoList:
+            if Id < self.startNo or Id > self.endNo:
+                Id += 1
+                continue
+            
             RepoDir = BaseDir + str(repo['id'])
             if not os.path.exists (RepoDir):
                 os.mkdir (RepoDir)
